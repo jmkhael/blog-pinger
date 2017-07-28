@@ -1,10 +1,24 @@
 version: "3"
 
 services:
+  # Core API services are pinned, HA is provided for functions.
+  gateway:
+    volumes:
+        - "/var/run/docker.sock:/var/run/docker.sock"
+    ports:
+        - 8080:8080
+    image: functions/gateway:0.5.6
+    networks:
+        - functions
+    environment:
+        dnsrr: "true"  # Temporarily use dnsrr in place of VIP while issue persists on PWD
+    deploy:
+        placement:
+            constraints: [node.role == manager]
   cron:
     image: vfarcic/docker-flow-cron
     networks:
-      - func_functions
+      - functions
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     ports:
@@ -16,7 +30,7 @@ services:
   swarm-listener:
     image: vfarcic/docker-flow-swarm-listener
     networks:
-      - func_functions
+      - functions
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -30,9 +44,9 @@ services:
     image: alpine
     command: wget http://gateway:8080/function/url_ping --post-data="http://jmkhael.io/"
     networks:
-      - func_functions
+      - functions
     deploy:
-      replicas: 0
+      #replicas: 0
       restart_policy:
         condition: none
     labels:
@@ -44,5 +58,6 @@ services:
       - "com.df.cron.schedule=@every 10s"
 
 networks:
-  func_functions:
-    external: true
+    functions:
+        driver: overlay
+        #attachable: true
