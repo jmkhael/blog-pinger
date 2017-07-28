@@ -1,0 +1,48 @@
+version: "3"
+
+services:
+  cron:
+    image: vfarcic/docker-flow-cron
+    networks:
+      - func_functions
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 9080:8080
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  swarm-listener:
+    image: vfarcic/docker-flow-swarm-listener
+    networks:
+      - func_functions
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DF_NOTIFY_CREATE_SERVICE_URL=http://cron:8080/v1/docker-flow-cron/job/create
+      - DF_NOTIFY_REMOVE_SERVICE_URL=http://cron:8080/v1/docker-flow-cron/job/remove
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+
+  cronjob:
+    image: alpine
+    command: wget http://gateway:8080/function/url_ping --post-data="http://jmkhael.io/"
+    networks:
+      - func_functions
+    deploy:
+      replicas: 0
+      restart_policy:
+        condition: none
+    labels:
+      - "com.df.notify=true"
+      - "com.df.cron=true"
+      - "com.df.cron.name=cronjob"
+      - "com.df.cron.image=alpine"
+      - "com.df.cron.command=echo Hello World"
+      - "com.df.cron.schedule=@every 10s"
+
+networks:
+  func_functions:
+    external: true
