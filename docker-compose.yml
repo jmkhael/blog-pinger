@@ -40,22 +40,22 @@ services:
       placement:
         constraints: [node.role == manager]
 
-  cronjob:
-    image: alpine
-    command: wget http://gateway:8080/function/url_ping --post-data="http://jmkhael.io/"
-    networks:
-      - functions
-    deploy:
+  #cronjob:
+  #  image: alpine
+  #  command: wget http://gateway:8080/function/url_ping --post-data="http://jmkhael.io/"
+  #  networks:
+  #    - functions
+  #  deploy:
       #replicas: 0
-      restart_policy:
-        condition: none
-    labels:
-      - "com.df.notify=true"
-      - "com.df.cron=true"
-      - "com.df.cron.name=cronjob"
-      - "com.df.cron.image=alpine"
-      - "com.df.cron.command=echo Hello World"
-      - "com.df.cron.schedule=@every 10s"
+  #    restart_policy:
+  #      condition: none
+#    labels:
+#      - "com.df.notify=true"
+#      - "com.df.cron=true"
+#      - "com.df.cron.name=cronjob"
+#      - "com.df.cron.image=alpine"
+#      - "com.df.cron.command=echo Hello World"
+#      - "com.df.cron.schedule=@every 10s"
 
 networks:
     functions:

@@ -14,4 +14,4 @@ functions:
     handler: ./slack_it
     image: jmkhael/faas-slack
     environment:
-      token: "xoxb-220160953431-BGWJIMXFl9UWQRs3mlS9ZHkp"
+      token: "xoxb-220160953431-3BNyffiLuMy9wDScC3XfUNzZ"
