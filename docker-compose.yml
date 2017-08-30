@@ -11,10 +11,33 @@ services:
     networks:
         - functions
     environment:
-        dnsrr: "true"  # Temporarily use dnsrr in place of VIP while issue persists on PWD
+         faas_nats_address: "nats"
+         faas_nats_port: 4222
+         dnsrr: "true"  # Temporarily use dnsrr in place of VIP while issue persists on PWD
     deploy:
         placement:
             constraints: [node.role == manager]
+
+  nats:
+        image: nats-streaming:0.5.0
+        ports:
+            - 4222:4222
+            - 8222:8222
+        command: "--store memory --cluster_id faas-cluster"
+        networks:
+            - functions
+  queue-worker:
+        image: functions/queue-worker:0.1
+        networks:
+            - functions
+        deploy:
+            restart_policy:
+                condition: on-failure
+                delay: 5s
+                max_attempts: 20
+                window: 380s
+
+
   cron:
     image: vfarcic/docker-flow-cron
     networks:
