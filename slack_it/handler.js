@@ -27,6 +27,7 @@ let gBot = controller.spawn({
 //});
 
 module.exports = (content, callback) => {
+    //console.log("Slackin: " + content);
     let req = JSON.parse(content);
     let res = {
       "slackit" : "v1",

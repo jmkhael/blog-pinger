@@ -1,3 +1,5 @@
+import logging
+import logging.config
 import requests
 import rx
 import json
@@ -8,50 +10,50 @@ class MyObserver(Observer):
         self.url = url
 
     def on_next(self, x):
-        print("Got: %s" % x)
+        #print("Got: %s" % x)
+        pass
 
     def on_error(self, e):
         error = "%s" % e
-        print(error)
-        requests.post("http://gateway:8080/function/slack_it",
-            json = {
-                "url": self.url,
-                "status": "nok",
-                "error" : error,
-                "message": "failed to ping " + self.url})
+        result = {
+            "url": self.url,
+            "status": "nok",
+            "error" : error,
+            "message": "failed to ping " + self.url
+            }
+
+        print(json.dumps(result))
 
     def on_completed(self):
-        print("Sequence completed")
+        #print("Sequence completed")
+        pass
 
 def print_url(url):
-    result = None
-    #try:
-    #    r =  requests.get(url,timeout = 20)
-    #    result = url +" => " + str(r.status_code)
-    #    print(result)
-    #except:
-    #    print("Timed out trying to reach URL.")
-    #    requests.post("http://gateway:8080/function/slack_it",
-    #    json = {
-    #        "url": url,
-    #        "status": "nok",
-    #        "message": "failed to ping " + url})
-
-    print("Handle this -> " + url)
     r =  requests.get(url,timeout = 20)
-    result = {"result": url +" => " + str(r.status_code)}
-    #print(result)
+    result = {
+        "url": url,
+        "status":"ok",
+        "status_code": str(r.status_code)
+    }
     print(json.dumps(result))
 
     return result
 
 def handle(req):
+    logging.config.dictConfig({
+    'version': 1,
+    # Other configs ...
+    'disable_existing_loggers': True
+    })
 
-    #print("Handle this -> " + req)
-    if req.find("http") == -1:
-        print("Give me a URL and I'll ping it for you.")
-        return
+    url = None
+    try:
+        url = json.loads(req)['url'];
 
-    xs = Observable.defer(lambda: Observable.of(req).map(lambda x: print_url(x)).delay(2000).retry(3)).subscribe(MyObserver(req))
+        if url.find("http") == -1:
+            print("Give me a json with a url field, and I'll ping it for you.")
+            return
 
-    #print_url(req)
+        xs = Observable.defer(lambda: Observable.of(url).map(lambda x: print_url(x)).delay(2000).retry(3)).subscribe(MyObserver(url))
+    except:
+        print("Give me a json with a url field, and I'll ping it for you.")
