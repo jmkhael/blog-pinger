@@ -13,10 +13,13 @@ functions:
     lang: node
     handler: ./slack_it
     image: jmkhael/faas-slack
-    environment:
-      token: "insert slack token here"
 
   down_notifier:
     lang: node
     handler: ./down_notifier
     image: jmkhael/down_notifier
+
+  url_ping_node:
+    lang: node
+    handler: ./url_ping_node
+    image: jmkhael/url_ping_node

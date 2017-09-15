@@ -4,7 +4,7 @@ const RxHttpRequest = require('rx-http-request').RxHttpRequest;
 var Rx = require('rxjs/Rx');
 
 function down_notifier(url) {
-  return RxHttpRequest.post('http://gateway:8080/function/url_ping', {
+  return RxHttpRequest.post('http://gateway:8080/function/url_ping_node', {
       body : {
         url: url
       },
