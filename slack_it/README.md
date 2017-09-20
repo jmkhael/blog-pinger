@@ -1,7 +1,6 @@
 This sample function sends a message to a slack channel
 
-This uses [Botkit](https://www.botkit.ai/)
-By default it will post to a #blog channel.
+This uses [Botkit](https://www.botkit.ai/). By default it will post to a #blog channel.
 
 You need to specify in the enviroment section a token enabling the function to join your Slack team.
 
