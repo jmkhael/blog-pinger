@@ -4,15 +4,12 @@ provider:
   network: "func_functions" # this is optional and defaults to func_functions
 
 functions:
-  url_ping:
-    lang: python
-    handler: ./url_ping
-    image: jmkhael/faas-urlping
-
   slack_it:
     lang: node
     handler: ./slack_it
     image: jmkhael/faas-slack
+    environment:
+      token: "xoxb-220160953431-Gesi7CeiwYV7ZGxmcoqklgpR"
 
   down_notifier:
     lang: node
