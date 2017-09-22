@@ -1,6 +1,6 @@
 # blog-pinger
 
-This repository is an OpenFaaS stack I use to ping my blog and report back on a slack channel if the ping fails.
+This repository is an [OpenFaaS](https://github.com/alexellis/faas) stack I use to ping my blog and report back on a slack channel if the ping fails.
 
 This has an accompanying blog post you can find here: http://jmkhael.io/blog-pinger
 
