@@ -4,6 +4,13 @@ This repository is an [OpenFaaS](https://github.com/alexellis/faas) stack I use 
 
 This has an accompanying blog post you can find here: http://jmkhael.io/downnotifier-site-pinger/
 
+This is a high level view of what is in this repository:
+![Stack Diagram](/img/down_notifier-diagram.png?raw=true "Stack Diagram")
+
+In the top section you can find logs of an OpenFaaS function, the brain of all this, in the bottom section I invoke this function on an inexistant site, and on the right you can see an incoming message to Slack with the site down information!
+
+![Stack Diagram](/img/down-notifier-out.gif?raw=true "Stack gif")
+
 ## TLDR;
 
 1. Adapt the token in samples.yml as specified in [slack_it](slack_it/README.md)
