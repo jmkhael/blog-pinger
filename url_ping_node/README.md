@@ -1,4 +1,4 @@
-This sample function will connect to a URL over HTTP and return the status code, or give a timeout error.
+This function will connect to a URL over HTTP and return the status code, or return the error encountered.
 
 Happy path:
 ```
