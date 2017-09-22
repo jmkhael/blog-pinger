@@ -1,6 +1,8 @@
 # blog-pinger
 FaaS stack to ping my blog and report back on a slack channel if the ping fails.
 
+This has an accompanying blog post you can find here: http://jmkhael.io/blog-pinger
+
 1. Adapt the token in samples.yml as specified in [slack_it](slack_it/README.md)
 2. build and deploy
 ```
