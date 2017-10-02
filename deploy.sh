@@ -1,9 +1,9 @@
 
-URL=$1
+export URL=$1
 if [ -z "$URL" ]
 then
       echo "You didn't pass a url to the script, defaulting to http://jmkhael.io"
-      URL="http://jmkhael.io"
+      export URL="http://jmkhael.io"
 fi
 
 docker stack deploy -c docker-compose.yml func
@@ -21,6 +21,6 @@ docker service create --name cronjob \
     -l "com.df.cron.command=echo Hello World" \
     -l "com.df.cron.schedule=@every 10s" \
     alpine \
-    wget http://gateway:8080/function/down_notifier --post-data='{"url" : "$URL"}'
+    wget http://gateway:8080/function/down_notifier --post-data='{"url" : "'$URL'"}'
 
 faas-cli -action deploy -f ./samples.yml
